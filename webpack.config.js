@@ -1,7 +1,11 @@
 const path = require("path"); // для работы с путями
+const fs = require("fs"); // для работы с файловой системой
 const {CleanWebpackPlugin} = require("clean-webpack-plugin"); // очищение папки проекта
-const HTMLWebpackPlugin = require("html-webpack-plugin"); // плагин для работы с HTML
+const HtmlWebpackPlugin = require("html-webpack-plugin"); // плагин для работы с HTML
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // плагин выносит css в отдельный файл
+
+const PAGES_DIR = `${path.resolve(__dirname, "src")}/assets/pages`;
+const PAGES = fs.readdirSync(PAGES_DIR).filter(filename => filename.endsWith(".pug"));
 
 
 
@@ -21,10 +25,10 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HTMLWebpackPlugin({
-            template: "./src/assets/index.pug",
-            filename: "index.html"
-        }),
+        ...PAGES.map(page => new HtmlWebpackPlugin({
+            template: `${PAGES_DIR}/${page}`,
+            filename: `./${page.replace(/\.pug/, ".html")}`
+        })),
         new MiniCssExtractPlugin({
             filename: "css/[name].css"
         })
@@ -74,5 +78,9 @@ module.exports = {
                 }
             },
         ]
+    },
+    devServer: {
+        overlay: true,
+        open: true
     }
 }

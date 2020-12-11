@@ -1,0 +1,1 @@
+import "./assets/pages/styles/style.sass"
