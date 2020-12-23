@@ -57,7 +57,21 @@ module.exports = {
                             publicPath: "/dist/css"
                         }
                     },
-                    'css-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            url: false
+                        }
+                    },
+                    {
+                        loader: "resolve-url-loader",
+                        options: {
+                            sourceMap: true,
+                            debug: true,
+                            // root: path.join(__dirname, 'src')
+                            attempts: 1,
+                        }
+                    },
                     'sass-loader'
                 ]
             },
@@ -70,7 +84,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.(woff|woff2|ttf|eot)$/,
+                test: /\.(woff|woff2|ttf|eot|svg)$/,
                 loader: "file-loader",
                 options: {
                     outputPath: "fonts",
